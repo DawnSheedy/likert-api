@@ -1,0 +1,145 @@
+for parameters, assume required unless otherwise specified
+/api
+    - root endpoint
+
+/auth
+    
+    PUT /register
+        params:
+            firstName
+            lastName
+            email
+            password
+        returns:
+            object:
+                id: created user id
+    
+    GET /token
+        params:
+            email
+            password
+        returns:
+            object:
+                access_token: JWT to access api, used as a Bearer token
+    
+/invites - Authentication required, via invite accessCode or JWT token
+
+    To authenticate with accessCode, include it in the body of your request, format:
+        body.accessCode: YOUR CODE
+
+    GET /
+        params:
+            accessCode: OPTIONAL
+        returns:
+            object:
+                IF accessCode is valid:
+                    Invite object
+                ELSE
+                    Array of all invites;
+
+    GET /:id
+        returns:
+            Invite object with corresponding id
+
+    PATCH /:id
+        update an invite
+        params: (app optional)
+            survey: new survey object
+            firstName: edited first name
+            lastName: edited last name
+            completed: boolean completed
+        returns:
+            object:
+                id: id of edited row
+    
+    DELETE /:id - requires admin authorization
+        delete an invite
+        returns:
+            deleted invite object
+    
+    GET /:id/answers
+        returns:
+            array of Answer objects including nested questions
+
+    PUT /:id/answers
+        params:
+            question: id of question to answer
+            input: actual answer
+        returns:
+            answer object
+    
+    GET /:id/survey
+        returns:
+            survey object
+
+/questions
+
+    GET /
+        returns:
+            array of question objects
+
+    GET /:id
+        returns:
+            question object
+    
+    PATCH /:id
+        update a question
+        params: (all optional)
+            survey: new survey
+            query: new query
+            helpText: new helpText
+            optionOne: new optionOne (defaults to Disagree)
+            optionTwo: new optionTwo (defaults to Agree)
+        returns:
+            object:
+                id: id of edited element
+
+    DELETE /:id
+        returns
+            deleted question object
+
+/surveys
+
+    GET /
+        returns:
+            array of survey objects
+    
+    PUT /
+        params:
+            title
+            description
+            questions: array of question objects (optional)
+
+    GET /:id
+        returns:
+            survey object
+
+    DELETE /:id
+        returns:
+            deleted survey object
+    
+    GET /:id/invites
+        returns:
+            array of invite objects
+
+    PUT /:id/invites
+        params:
+            firstName
+            lastName
+            completed (default: false)
+        returns:
+            invite object
+    
+    GET /:id/questions
+        returns:
+            array of question objects
+    
+    PUT /:id/questions
+        params:
+            query
+            helpText (optional)
+            optionOne (default Disagree)
+            optionTwo (default Agree)
+        returns
+            question object
+
