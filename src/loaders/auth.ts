@@ -46,8 +46,8 @@ export default async (): Promise<void> => {
         done(null, user);
     }));
 
-    passport.use('response-auth', new CustomStrategy(async (req, done) => {
-        const response = await Invite.findOne({ accessCode: req.body.accessCode })
+    passport.use('response-auth', new CustomStrategy(async (req:any, done) => {
+        const response = await Invite.findOne({ accessCode: req.query.accessCode })
             .catch(err => done(err));
         if (!response) {
             done(null, false);
