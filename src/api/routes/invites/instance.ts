@@ -26,7 +26,7 @@ export default (api: Router): void => {
     api.use('/invites/:id', route);
 
     // Require authentication to access
-    route.use(passport.authenticate(['response-auth', 'token'], {session: false}));
+    route.use(passport.authenticate(['response-auth', 'token'], {session: false, failWithError: true}));
 
     //Convert survey parameter into usable object.
     route.use(paramTo.INVITE);

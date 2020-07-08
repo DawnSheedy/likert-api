@@ -13,7 +13,7 @@ export default (api: Router): void => {
     api.use('/invites', route);
 
     // Require authentication to access
-    route.use(passport.authenticate(['token', 'response-auth'], {session: false}));
+    route.use(passport.authenticate(['token', 'response-auth'], {session: false, failWithError: true}));
 
     /*
         GET /

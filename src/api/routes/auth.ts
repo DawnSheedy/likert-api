@@ -43,7 +43,7 @@ export default (api:Router): void => {
         Generate JWT from username password.
     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    route.get('/token', passport.authenticate('local', {session: false}), async (req: any, res: any) => {
+    route.get('/token', passport.authenticate('local', {session: false, failWithError: true}), async (req: any, res: any) => {
         if (!req.user) {
             res.sendStatus(403);
         }

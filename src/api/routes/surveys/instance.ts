@@ -29,7 +29,7 @@ export default (api: Router): void => {
     api.use('/surveys/:id', route);
 
     // Require admin authentication
-    route.use(passport.authenticate('token', { session: false }));
+    route.use(passport.authenticate('token', { session: false, failWithError: true }));
     route.use(adminCheck);
 
     //Convert survey parameter into usable object.
