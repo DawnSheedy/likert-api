@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import auth from './routes/auth';
 import survey from './routes/surveys';
-import response from './routes/response';
 import invites from './routes/invites';
 import questions from './routes/questions';
 
