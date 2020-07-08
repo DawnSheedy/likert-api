@@ -16,7 +16,7 @@ interface UserInputSchema extends UserInputSchemaSample {
 export default class AnswerService extends EntityServiceSample<UserInputSchema, Answer> {
 
     async create(info: UserInputSchema): Promise<Answer> {
-        const exists = await Answer.find(info);
+        const exists = await Answer.findOne(info);
         if (exists) {
             return Promise.reject(new Error('Answer already exists'));
         }
