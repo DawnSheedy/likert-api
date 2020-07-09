@@ -110,9 +110,10 @@ export default (api: Router): void => {
         }), async (req, res, next) => {
             if (req.body.input < 0 || req.body.input > 4) {
                 next(new Error("Response out of range."))
+                return
             }
-            const exists = await Answer.findOne({ invite: req.body.invite, question: req.body.question })
-                .catch(err => next(err));
+            /*const exists = await Answer.findOne({ invite: req.body.invite, question: req.body.question })
+                .catch(err => next(err));*/
             await answerService.create(req.body)
                 .then((response) => {
                     questionsRemainInSurveyBasedOnInvite(req.body);
