@@ -108,6 +108,9 @@ export default (api: Router): void => {
                 input: Joi.number().required()
             })
         }), async (req, res, next) => {
+            if (req.body.input < 0 || req.body.input > 4) {
+                next(new Error("Response out of range."))
+            }
             const exists = await Answer.findOne({ invite: req.body.invite, question: req.body.question })
                 .catch(err => next(err));
             await answerService.create(req.body)
