@@ -40,6 +40,9 @@ export default async (): Promise<void> => {
     }, async (jwt_payload, done) => {
         //console.log(JSON.stringify(jwt_payload));
         const user = await User.findOne({ id: jwt_payload.user.id });
+        delete user.hash;
+        delete user.salt;
+        delete user.email;
         if (!user) {
             done(null, false, { message: 'Invalid Token ' });
         }
@@ -50,6 +53,9 @@ export default async (): Promise<void> => {
         const response = await Invite.findOne({ accessCode: req.query.accessCode })
             .catch(err => done(err));
         if (!response) {
+            done(null, false);
+        }
+        if (response['completed']) {
             done(null, false);
         }
         done(null, response);

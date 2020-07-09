@@ -28,6 +28,12 @@ export default (app: Router): void => {
 
     app.use('/api', apiRoutes());
 
+    
+    //Don't need a whole file for one user.
+    app.get('/api/user', passport.authenticate('token', {session: false}), async (req, res, next) => {
+        res.json(req.user);
+    })
+
     app.use(async (err, req, res, next) => {
         if (isCelebrate(err)) {
             res.status(400);

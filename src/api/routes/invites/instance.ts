@@ -112,12 +112,35 @@ export default (api: Router): void => {
                 .catch(err => next(err));
             await answerService.create(req.body)
                 .then((response) => {
+                    questionsRemainInSurveyBasedOnInvite(req.body);
                     res.json(response);
                 })
                 .catch((err) => {
                     next(err);
                 });
         });
+
+    async function questionsRemainInSurveyBasedOnInvite(body) {
+        const survey: any = await Survey.findOne(body.invite.survey, { relations: ['questions'] })
+            .catch(err => {
+                return false;
+            });
+        const answers: any = await Answer.find({ where: { invite: body.invite.id }, relations: ['question'] })
+            let answerQuestionIds = [];
+            for (let i = 0; i < answers.length; i++) {
+                answerQuestionIds[i] = answers[i].question.id
+            }
+            for (let i = survey.questions.length - 1; i >= 0; i--) {
+                if (answerQuestionIds.includes(survey.questions[i].id)) {
+                    survey.questions.splice(i, 1);
+                }
+            }
+
+        if (survey.questions.length === 0) {
+            const completed:any = { completed: true }
+            inviteService.update(body.invite.id, completed);
+        }
+    }
 
     route.get('/survey', async (req: any, res, next) => {
         const survey: any = await Survey.findOne(req.body.invite.survey, { relations: ['questions'] })
@@ -126,7 +149,6 @@ export default (api: Router): void => {
         //Remove answered questions, unless user is an admin
         if (!req.user.isAdmin) {
             const answers: any = await Answer.find({ where: { invite: req.body.invite.id }, relations: ['question'] })
-            console.log(JSON.stringify(answers))
             let answerQuestionIds = [];
             for (let i = 0; i < answers.length; i++) {
                 answerQuestionIds[i] = answers[i].question.id
