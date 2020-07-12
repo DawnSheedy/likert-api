@@ -5,6 +5,7 @@ import User from '../entity/User/entity';
 import { Strategy as JWTstrategy, ExtractJwt } from 'passport-jwt';
 import config from './../config';
 import Invite from '../entity/Invite/entity';
+import Survey from '../entity/Survey/entity';
 
 export default async (): Promise<void> => {
     passport.use('local', new LocalStrategy({
@@ -50,7 +51,7 @@ export default async (): Promise<void> => {
     }));
 
     passport.use('response-auth', new CustomStrategy(async (req:any, done) => {
-        const response = await Invite.findOne({ accessCode: req.query.accessCode })
+        const response = await Invite.findOne({ where: {accessCode: req.query.accessCode } })
             .catch(err => done(err));
         if (!response) {
             done(null, false);

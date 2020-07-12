@@ -19,10 +19,10 @@ export default class Invite extends EntitySample {
     @Column({ default: false })
     completed: boolean;
 
-    @ManyToOne(() => Survey, survey => survey.invites, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Survey, survey => survey.invites, { onDelete: 'CASCADE', eager: true })
     survey: Survey;
 
-    @OneToMany(() => Answer, answer => answer.invite, { cascade: true })
+    @OneToMany(() => Answer, answer => answer.invite, { cascade: true, eager: true })
     answers: Answer[];
 
     public async generateAccessCode(): Promise<string> {

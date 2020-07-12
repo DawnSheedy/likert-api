@@ -125,7 +125,7 @@ export default (api: Router): void => {
         });
 
     async function questionsRemainInSurveyBasedOnInvite(body) {
-        const survey: any = await Survey.findOne(body.invite.survey, { relations: ['questions'] })
+        const survey: any = await Survey.findOne({ where: {id: body.invite.survey.id }, relations: ['questions'] })
             .catch(err => {
                 return false;
             });
@@ -147,7 +147,7 @@ export default (api: Router): void => {
     }
 
     route.get('/survey', async (req: any, res, next) => {
-        const survey: any = await Survey.findOne(req.body.invite.survey, { relations: ['questions'] })
+        const survey: any = await Survey.findOne({ where: {id: req.body.invite.survey.id }, relations: ['questions'] })
             .catch(err => next(err));
 
         //Remove answered questions, unless user is an admin
