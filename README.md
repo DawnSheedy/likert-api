@@ -1,7 +1,3 @@
-# Awesome Project Build with TypeORM
+# Likert API
 
-Steps to run this project:
-
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Run `npm start` command
+An API for creating and taking Likert (1-5 scale) style surveys.
